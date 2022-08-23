@@ -8,8 +8,22 @@ namespace App\Services;
 
 class CatalogService
 {
-    public function read(string $file = "data.csv")
+    public function read(string $file)
     {
+        if (trim($file) === "") {
+            $data = [
+                'error' => 'Некорректное имя файла'
+            ];
+
+            return response()
+                ->json(
+                    $data,
+                    400,
+                    ['Content-Type: application/json'],
+                    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
+                );
+        }
+
         $extension = pathinfo(storage_path("/" . $file), PATHINFO_EXTENSION);
 
         if (trim($extension) !== 'csv') {
